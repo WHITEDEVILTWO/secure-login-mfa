@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page with OTP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 0.7rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .otp-section {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Login</h2>
+    <div class="login-section">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Send OTP</button>
+    </div>
+    <div class="otp-section">
+        <input type="text" id="otp" placeholder="Enter OTP">
+        <button onclick="verifyOtp()">Verify OTP</button>
+    </div>
+    <p id="message"></p>
+</div>
+
+<script>
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        })
+        .then(res => {
+            if (res.ok) {
+                document.querySelector('.login-section').style.display = 'none';
+                document.querySelector('.otp-section').style.display = 'block';
+                document.getElementById('message').textContent = 'OTP sent to your email.';
+            } else {
+                document.getElementById('message').textContent = 'Login failed!';
+            }
+        })
+        .catch(err => console.error(err));
+    }
+
+    function verifyOtp() {
+        const otp = document.getElementById('otp').value;
+        const email = document.getElementById('username').value;
+
+        fetch(`/verify-otp?email=${email}&otp=${otp}`, {
+            method: 'POST'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.token) {
+                document.getElementById('message').textContent = 'Login successful! Token received.';
+                console.log('JWT Token:', data.token);
+            } else {
+                document.getElementById('message').textContent = 'OTP verification failed!';
+            }
+        })
+        .catch(err => console.error(err));
+    }
+</script>
+</body>
+</html>
