@@ -124,7 +124,7 @@ import org.springframework.web.bind.annotation.RestController;
 			return list;
 		}
 
-		
+		//OTP GENERATION POST LOGIN
 	    @PostMapping("/login")
 	    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
 	        try {
@@ -160,7 +160,7 @@ import org.springframework.web.bind.annotation.RestController;
 	        }
 	    }
 	    
-	   
+	   //OTP VAILIDATION AND TOKEN GENERATION
 	    @PostMapping("/validate-otp")
 	    public ResponseEntity<?> OTPValidation(@RequestBody OTPValidationRequest OTPVR){
 	    	
