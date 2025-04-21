@@ -110,7 +110,7 @@ import org.springframework.web.bind.annotation.RestController;
 		        //return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    //}
 		}
-
+		//GETTING ALL USERS AVAILABLE
 		@GetMapping("/all")
 		public List<GetUserResponse> getAll() { 
 			List<AppUser> user =userservice.getall();
